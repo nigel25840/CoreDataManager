@@ -1,0 +1,40 @@
+#import <XCTest/XCTest.h>
+#import "DataManager.h"
+#import "River.h"
+
+@interface RiverLogTests : XCTestCase
+
+@end
+
+@implementation RiverLogTests
+
+- (void)setUp
+{
+    [super setUp];
+    // Put setup code here. This method is called before the invocation of each test method in the class.
+}
+
+- (void)tearDown
+{
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
+}
+
+-(void)testMOC{
+    DataManager *dMgr = [DataManager sharedInstance];
+    NSManagedObjectContext *cxt = [dMgr managedObjectContext];
+    XCTAssert(cxt, @"Failed to create MOC");
+}
+
+-(void)testDataManagerUpdate{
+    DataManager *dMgr = [DataManager sharedInstance];
+    
+    River *riverObject = [NSEntityDescription insertNewObjectForEntityForName:@"River" inManagedObjectContext:[dMgr managedObjectContext]];
+    [riverObject setState:@"WV"];
+    [riverObject setName:@"New River Gorge"];
+    [riverObject setUsgs_id:@"1234"];
+    
+    XCTAssert([dMgr save], @"Failed to save River object data");
+}
+
+@end
